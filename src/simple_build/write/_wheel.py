@@ -145,7 +145,11 @@ class WheelMetadata:
         """Post init."""
         pat = re.compile(r"[^\w\d.]+", re.UNICODE)
         name = pat.sub("-", self.name)
-        version = pat.sub("-", self.version)
+        if "+" in self.version:
+            pub_ver, local_ver = self.version
+            version = f"{pat.sub("-", pub_ver)}+{local_ver}"
+        else:
+            version = pat.sub("-", self.version)
         python = pat.sub("-", self.python)
         abi = pat.sub("-", self.abi)
         arch = pat.sub("-", self.arch)
