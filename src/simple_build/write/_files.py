@@ -52,6 +52,7 @@ def gather_files(
 
     # add any user includes
     for include in user_includes:
+        print(f"include files {include}")
         for inc in root.glob(include):
             if inc.is_file():
                 files.add(inc)
