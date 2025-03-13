@@ -56,16 +56,8 @@ def write_wheel(  # noqa: PLR0912
 
                 # TODO config options to include/exclude files in wheel modules,
                 # but they must allow for the behaviour above.
-                wheel_config = package.tool.get("wheel", {})
-                if not wheel_config:
-                    file_paths = gather_files(
-                        package.root,
-                        use_git=wheel_config.get("use_git", True),
-                        user_includes=wheel_config.get("include", []),
-                        user_excludes=wheel_config.get("exclude", []),
-                    )
-                else:
-                    file_paths = gather_files(module, allow_non_git=True)
+
+                file_paths = gather_files(module, allow_non_git=True)
             elif module.is_file():
                 file_paths = [module]
             else:
