@@ -152,7 +152,7 @@ def resolve_tool_section(  # type: ignore[misc]
             )
         else:
             wresult = _resolve_tool_sdist_section(config["wheel"], root, tool_section)
-            result.data["sdist"] = wresult[0]
+            result.data["wheel"] = wresult[0]
             result.errors.extend(wresult[1])
 
     return result
