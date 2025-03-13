@@ -46,7 +46,7 @@ def parse_pyproject_toml(root: Path) -> PyMetadata:
                 pyproject_file, "\n".join(f"- {e}" for e in errors)
             )
         )
-
+    raise RecursionError(f"{tool_result.data}")
     return {"project": project_result.data, "tool": tool_result.data}
 
 
