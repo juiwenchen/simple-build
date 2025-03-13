@@ -61,10 +61,22 @@ class SdistMetadata(t.TypedDict, total=False):
     """The list of files to exclude from the sdist."""
 
 
+class WheelMetadata(t.TypedDict, total=False):
+    """The sdist build configuration."""
+
+    use_git: bool
+    """Whether to use git to determine tracked files (default True)."""
+    include: list[str]
+    """The list of additional files to include in the wheel."""
+    exclude: list[str]
+    """The list of files to exclude from the wheel."""
+
 class ToolMetadata(t.TypedDict, total=False):
     """The parsed tool configuration."""
 
     sdist: "SdistMetadata"
+    """The sdist build configuration."""
+    wheel: "WheelMetadata"
     """The sdist build configuration."""
     pre_write_hooks: list["PreWriteHook"]
     """The list of pre-write hooks."""
@@ -130,6 +142,18 @@ def resolve_tool_section(  # type: ignore[misc]
             sresult = _resolve_tool_sdist_section(config["sdist"], root, tool_section)
             result.data["sdist"] = sresult[0]
             result.errors.extend(sresult[1])
+
+    if "wheel" in config:
+        if not isinstance(config["wheel"], dict):
+            result.errors.append(
+                ProjectValidationError(
+                    f"tool.{tool_section}.wheel", "type", "must be a table"
+                )
+            )
+        else:
+            wresult = _resolve_tool_sdist_section(config["wheel"], root, tool_section)
+            result.data["sdist"] = wresult[0]
+            result.errors.extend(wresult[1])
 
     return result
 
